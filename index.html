@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix Clone</title>
+  <style>
+    /* General Reset */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #141414;
+      color: white;
+    }
+
+    /* Note Section */
+    .note {
+      background-color: #e50914;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1001;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #141414;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #e50914;
+      position: relative;
+      margin-top: 50px; /* To make space for the note bar */
+    }
+
+    /* Search Box Styles */
+    .search-box {
+      display: none; /* Initially hidden */
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background-color: #333;
+      padding: 8px;
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-size: 1rem;
+      width: 200px;
+    }
+    .search-box::placeholder {
+      color: #aaa;
+    }
+
+    /* Search Icon Styles */
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    /* Banner Section */
+    .banner {
+      position: relative;
+      height: 400px;
+      background: url('https://via.placeholder.com/1920x400') no-repeat center center/cover;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .banner h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .banner p {
+      font-size: 1.2rem;
+    }
+
+    /* Movie Section */
+    .movies-section {
+      padding: 20px;
+    }
+    .movies-section h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .movies-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: scroll;
+    }
+    .movie-card {
+      flex: 0 0 auto;
+      width: 200px;
+      cursor: pointer;
+      position: relative;
+    }
+    .movie-card img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+    .movie-card:hover img {
+      transform: scale(1.1);
+    }
+    .movie-card h3 {
+      font-size: 1rem;
+      margin: 5px 0;
+      text-align: center;
+    }
+
+    /* Premium APK Section */
+    .premium-apk-section {
+      padding: 20px;
+    }
+    .premium-apk-section h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .premium-apk-container {
+      display: flex;
+      gap: 20px;
+      overflow-x: scroll;
+    }
+    .premium-apk-card {
+      flex: 0 0 auto;
+      width: 100px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .premium-apk-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    .premium-apk-card:hover img {
+      transform: scale(1.1);
+    }
+    .premium-apk-card h3 {
+      font-size: 1rem;
+      margin-top: 5px;
+    }
+
+    /* Video Player Modal */
+    .video-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .video-modal.active {
+      display: flex;
+    }
+    .video-modal video {
+      width: 80%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Note Section -->
+  <div class="note">
+    Note: Welcome to the Netflix Clone! Enjoy the content.
+  </div>
+
+  <!-- Header -->
+  <header>
+    ALL IN ONE
+    <!-- Search Icon -->
+    <span class="search-icon" id="searchIcon">&#128269;</span>
+    <!-- Search Box -->
+    <input type="text" id="searchBox" class="search-box" placeholder="Search Movies...">
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div>
+      <h1>WELCOME TO ALL IN ONE</h1>
+      <p>Watch your favorite content and downlode premimum apk</p>
+    </div>
+  </div>
+
+  <!-- Movie Sections -->
+  <div class="movies-section">
+    <h2>Popular Movies</h2>
+    <div class="movies-container" id="moviesContainer">
+      <div class="movie-card" data-video="http://6rga.a0p3.com/vod/1/2025/01/10/e64fafec8f51/1251578576.mp4?wsSecret=77a53ab2a80e436d14c88a626a8493ce&wsTime=67948436">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/images.jpeg" alt="Game changer">
+        <h3>Game changer</h3>
+      </div>
+      <div class="movie-card" data-video="video2.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 2">
+        <h3>Movie 2</h3>
+      </div>
+      <div class="movie-card" data-video="video3.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 3">
+        <h3>Movie 3</h3>
+      </div>
+      <div class="movie-card" data-video="video4.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 4">
+        <h3>Movie 4</h3>
+      </div>
+      <div class="movie-card" data-video="video5.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 5">
+        <h3>Movie 5</h3>
+      </div>
+      <div class="movie-card" data-video="video6.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 6">
+        <h3>Movie 6</h3>
+      </div>
+      <div class="movie-card" data-video="video7.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 7">
+        <h3>Movie 7</h3>
+      </div>
+      <div class="movie-card" data-video="video8.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 8">
+        <h3>Movie 8</h3>
+      </div>
+      <div class="movie-card" data-video="video9.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 9">
+        <h3>Movie 9</h3>
+      </div>
+      <div class="movie-card" data-video="video10.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 10">
+        <h3>Movie 10</h3>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Premium APK Section -->
+  <div class="premium-apk-section">
+    <h2>Premium APKs</h2>
+    <div class="premium-apk-container">
+      <div class="premium-apk-card" onclick="window.open('https://devuploads.com/mp0z6681vapy', '_blank')">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/IMG_20250125_164316_907.jpg" alt="Mini play">
+        <h3>Amazon mini tv</h3>
+      </div>
+      <div class="premium-apk-card" onclick="window.open('https://devuploads.com/l2vqvjykztdp', '_blank')">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/IMG_20250126_154459_326.jpg" alt="APK 2">
+        <h3>Prime video</h3>
+      </div>
+      <div class="premium-apk-card" onclick="window.open('https://devuploads.com/32f0bsxx5446', '_blank')">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/IMG_20250126_153749_057.jpg" alt="APK 3">
+        <h3>Discovery+
+        (IND IP)</h3>
+      </div>
+      <div class="premium-apk-card" onclick="window.open('https://devuploads.com/k8wdbycvsuam', '_blank')">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/IMG_20250126_155247_961.jpg" alt="APK 4">
+        <h3>Apple Tv</h3>
+      </div>
+      <div class="premium-apk-card" onclick="window.open('https://example.com/apk5', '_blank')">
+        <img src="https://via.placeholder.com/100x100" alt="APK 5">
+        <h3>APK 5</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie Sections -->
+  <div class="movies-section">
+    <h2>Hindi movies</h2>
+    <div class="movies-container" id="moviesContainer">
+      <div class="movie-card" data-video="http://6rga.a0p3.com/vod/1/2025/01/10/e64fafec8f51/1251578576.mp4?wsSecret=77a53ab2a80e436d14c88a626a8493ce&wsTime=67948436">
+        <img src="https://upload-cloudfalre-r2-assets.omrecipes.dev/images.jpeg" alt="Game changer">
+        <h3>Game changer</h3>
+      </div>
+      <div class="movie-card" data-video="video2.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 2">
+        <h3>Movie 2</h3>
+      </div>
+      <div class="movie-card" data-video="video10.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 10">
+        <h3>Movie 10</h3>
+      </div>
+    </div>
+  </div>
+  
+    <!-- Movie Sections -->
+  <div class="movies-section">
+    <h2>Popular Movies</h2>
+    <div class="movies-container" id="moviesContainer">
+      <div class="movie-card" data-video="video1.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 1">
+        <h3>Movie 1</h3>
+      </div>
+      <div class="movie-card" data-video="video2.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 2">
+        <h3>Movie 2</h3>
+      </div>
+      <div class="movie-card" data-video="video10.mp4">
+        <img src="https://via.placeholder.com/200x300" alt="Movie 10">
+        <h3>Movie 10</h3>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Video Player Modal -->
+  <div class="video-modal" id="videoModal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <video controls id="videoPlayer"></video>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Get modal elements
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const closeModal = document.getElementById('closeModal');
+    const movieCards = document.querySelectorAll('.movie-card');
+    const searchBox = document.getElementById('searchBox');
+    const searchIcon = document.getElementById('searchIcon');
+    const moviesContainer = document.getElementById('moviesContainer');
+
+    // Open modal and play video
+    movieCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const videoSrc = card.getAttribute('data-video');
+        videoPlayer.src = videoSrc;
+        videoModal.classList.add('active');
+        videoPlayer.play();
+      });
+    });
+
+    // Close modal and stop video
+    closeModal.addEventListener('click', () => {
+      videoModal.classList.remove('active');
+      videoPlayer.pause();
+      videoPlayer.src = '';
+    });
+
+    // Close modal on outside click
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        videoModal.classList.remove('active');
+        videoPlayer.pause();
+        videoPlayer.src = '';
+      }
+    });
+
+    // Toggle search box visibility
+    searchIcon.addEventListener('click', () => {
+      searchBox.style.display = searchBox.style.display === 'none' || searchBox.style.display === '' ? 'block' : 'none';
+      searchBox.focus();
+    });
+
+    // Search functionality
+    searchBox.addEventListener('input', () => {
+      const query = searchBox.value.toLowerCase();
+      const movieCards = document.querySelectorAll('.movie-card');
+      
+      movieCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(query)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
